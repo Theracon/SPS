@@ -15,7 +15,13 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "mongoose": "^6.0.4",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0",
     "path": "^0.12.7"
   }
 }

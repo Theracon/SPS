@@ -7,6 +7,12 @@ app.use(express.json());
 
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
+// MongoDB Configuration
+const mongoose = require("mongoose");
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost/googlebooks";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
 app.get("/api", (req, res) => {
   res.status(200).send({
     title: "SPS API",
