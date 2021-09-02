@@ -1,0 +1,9 @@
+{
+  "name": "SPS",
+  "version": "1.0.0",
+  "description": "A simple product store API",
+  "main": "index.js",
+  "author": "Ashraf Yusuf",
+  "license": "MIT",
+  "private": false
+}
