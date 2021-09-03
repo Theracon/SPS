@@ -3,7 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const Endpoint = require('./endpoint');
 require('dotenv').config();
 
 const app = express();
@@ -33,38 +32,8 @@ app.get('/api', (req, res) => {
   });
 });
 
-app.get('/api/endpoints', (req, res) => {
-  Endpoint.find({}, (err, endpoints) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(endpoints);
-    }
-  });
-});
-
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
-
-app.post('/api/:numberOfHits', (req, res) => {
-  if (!req.body.endpoint) {
-    res.status(418).send({
-      message: 'Null or invalid endpoint.',
-    });
-  }
-  const endpointObject = new Endpoint({
-    title: 'SPS API 1.0',
-    endpoint: req.body.endpoint,
-    numberOfHits: req.params.numberOfHits,
-  });
-  endpointObject.save((err, endpoint) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(endpoint);
-    }
-  });
 });
 
 app.listen(process.env.PORT, () => {
