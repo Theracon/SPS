@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const multer = require('multer');
-const User = require('../../models/user.model');
 const Product = require('../../models/product.model');
 
 // Configure multer to store image, and set file name
