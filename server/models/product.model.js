@@ -20,6 +20,7 @@ const ProductSchema = mongoose.Schema({
   },
   added_by: {
     type: String,
+    required: true,
   },
   added_on: {
     type: Date,

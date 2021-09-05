@@ -38,44 +38,145 @@ const upload = multer({
 // @route GET /api/USER_ID/profile
 // @desc Fetch user profile data from database
 // @access Public
+router.get('/:id/profile', (req, res) => {
+  try {
+    const { id } = req.params;
+    User.findById(id)
+      .exec()
+      .then((user) => {
+        if (user) {
+          res.status(200).json({
+            success: true,
+            data: user,
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            status: 404,
+            message: 'User not found.',
+          });
+        }
+      });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: 'Server error.',
+    });
+  }
+});
 
 // @title Get Products Route
 // @route GET /api/USER_ID/products
 // @desc Fetch all products
 // @access Public
+router.get('/:id/products', (req, res) => {
+  try {
+    const { id } = req.params;
+    Product.find({ added_by: id })
+      .exec()
+      .then((products) => {
+        if (products.length >= 0) {
+          return res.status(200).json({
+            success: true,
+            data: products,
+          });
+        }
+        res.status(404).json({
+          success: false,
+          status: 404,
+          message: 'User not found.',
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: 'Server error.',
+    });
+  }
+});
 
 // @title Get Product By ID Route
 // @route GET /api/USER_ID/products/PRODUCT_ID
 // @desc Fetch product by product id
 // @access Public
+router.get('/:id/products/:productId', (req, res) => {
+  try {
+    const { id, productId } = req.params;
+    User.findById(id)
+      .exec()
+      .then((user) => {
+        if (user) {
+          Product.findById(productId)
+            .exec()
+            .then((product) => {
+              if (product) {
+                return res.status(200).json({
+                  success: true,
+                  data: product,
+                });
+              }
+              res.status(404).json({
+                success: false,
+                status: 404,
+                message: 'Product not found.',
+              });
+            });
+        } else {
+          res.status(404).json({
+            success: false,
+            status: 404,
+            message: 'User not found.',
+          });
+        }
+      });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: 'Server error.',
+    });
+  }
+});
 
 // @title Add Product Route
 // @route POST /api/USER_ID/products/new
 // @desc Add a new product
 // @access Public
-router.post('/products/new', upload.single('image'), async (req, res) => {
+router.post('/:id/products/new', upload.single('image'), async (req, res) => {
   try {
     // Fetch product details from form
     const { name, price, description } = req.body;
     // Find requesting user in the database
-    const user = User.findById(req.params.id);
-    // Create new product
-    const product = new Product({
-      name,
-      price,
-      description,
-      image: req.file.path,
-      added_by: user.id,
-    });
-    // Save new product to database
-    await product.save().then((result) => {
-      res.status(201).json({
-        success: true,
-        data: result._id,
+    User.findById(req.params.id)
+      .exec()
+      .then((user) => {
+        if (user) {
+          // Create new product
+          const newProduct = new Product({
+            name,
+            price,
+            description,
+            image: req.file.path,
+            added_by: req.params.id,
+          });
+          // Save product to database
+          newProduct.save().then((product) => {
+            res.status(200).json({
+              success: true,
+              data: product._id,
+            });
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            status: 404,
+            message: 'User not found.',
+          });
+        }
       });
-    });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       success: false,
       status: 500,
