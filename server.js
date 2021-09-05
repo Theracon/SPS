@@ -28,8 +28,8 @@ app.use(morgan('dev'));
 // Set up admin and user routes
 app.use('/auth/users', require('./server/routes/auth/user'));
 app.use('/auth/admin', require('./server/routes/auth/admin'));
+app.use('/admin/products', require('./server/routes/api/admin'));
 app.use('/api', require('./server/routes/api/common'));
-app.use('/api/admin/:id', require('./server/routes/api/admin'));
 
 // Configure app to use static react templates in the 'build' folder
 app.get('*', (req, res) => {

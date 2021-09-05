@@ -38,7 +38,7 @@ const upload = multer({
 // @route GET /api/USER_ID/profile
 // @desc Fetch user profile data from database
 // @access Public
-router.get('/:id/profile', (req, res) => {
+router.get('/:id/profile', async (req, res) => {
   try {
     const { id } = req.params;
     User.findById(id)
@@ -66,11 +66,41 @@ router.get('/:id/profile', (req, res) => {
   }
 });
 
-// @title Get Products Route
-// @route GET /api/USER_ID/products
-// @desc Fetch all products
+// @title Fetch All Products Route
+// @route GET /api/USER_ID/products/all
+// @desc Fetch all products from database
 // @access Public
-router.get('/:id/products', (req, res) => {
+router.get('/:id/products/all', async (req, res) => {
+  try {
+    Product.find()
+      .exec()
+      .then((products) => {
+        if (products.length >= 0) {
+          return res.status(200).json({
+            success: true,
+            data: products,
+          });
+        }
+        res.status(404).json({
+          success: false,
+          status: 404,
+          message: 'User not found.',
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: 'Server error.',
+    });
+  }
+});
+
+// @title Fetch User Products Route
+// @route GET /api/USER_ID/products
+// @desc Fetch all products added by a particular user
+// @access Public
+router.get('/:id/products', async (req, res) => {
   try {
     const { id } = req.params;
     Product.find({ added_by: id })
@@ -101,7 +131,7 @@ router.get('/:id/products', (req, res) => {
 // @route GET /api/USER_ID/products/PRODUCT_ID
 // @desc Fetch product by product id
 // @access Public
-router.get('/:id/products/:productId', (req, res) => {
+router.get('/:id/products/:productId', async (req, res) => {
   try {
     const { id, productId } = req.params;
     User.findById(id)
