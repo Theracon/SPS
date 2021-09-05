@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+const User = require('../../models/user.model');
 
 // @title User Signup Route
-// @route POST /api/users
+// @route POST /auth/users/signup
 // @desc Register a new user
 // @access Public
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     // Fetch user details from form
     const { name, email, password } = req.body;
@@ -37,19 +37,19 @@ router.post('/', async (req, res) => {
     // Send the token securely in a cookie
     res.cookie('token', token, { httpOnly: true }).send({
       success: true,
-      data: newUser._id,
+      data: newUser,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });
 
 // @title User Login Route
-// @route POST /api/users/login
+// @route POST /auth/users/login
 // @desc Log user in
 // @access Public
 router.post('/login', async (req, res) => {
@@ -82,19 +82,19 @@ router.post('/login', async (req, res) => {
     // Send the token securely in a cookie
     res.cookie('token', token, { httpOnly: true }).send({
       success: true,
-      data: token,
+      data: existingUser,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });
 
 // @title User Logout Route
-// @route POST /api/users/logout
+// @route POST /auth/users/logout
 // @desc Log user out
 // @access Public
 router.get('/logout', async (req, res) => {
@@ -108,7 +108,7 @@ router.get('/logout', async (req, res) => {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });

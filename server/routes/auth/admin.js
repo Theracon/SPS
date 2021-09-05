@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+const User = require('../../models/user.model');
 
 // @title Admin Signup Route
-// @route POST /api/admin/
+// @route POST /auth/admin/signup
 // @desc Register a new admin
 // @access Public
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     // Fetch user details from form
     const { name, email, password } = req.body;
@@ -43,13 +43,13 @@ router.post('/', async (req, res) => {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });
 
 // @title Admin Login Route
-// @route POST /api/admin/login
+// @route POST /auth/admin/login
 // @desc log admin in
 // @access Public
 router.post('/login', async (req, res) => {
@@ -88,13 +88,13 @@ router.post('/login', async (req, res) => {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });
 
 // @title Admin Logout Route
-// @route POST /api/admin/logout
+// @route POST /auth/admin/logout
 // @desc Logout admin out
 // @access Public
 router.get('/logout', async (req, res) => {
@@ -108,7 +108,7 @@ router.get('/logout', async (req, res) => {
     res.status(500).json({
       success: false,
       status: 500,
-      message: err,
+      message: 'Server error.',
     });
   }
 });

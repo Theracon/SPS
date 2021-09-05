@@ -1,41 +1,7 @@
+// Dependency
 const mongoose = require('mongoose');
 
-// Product schema
-const ProductSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  image: {
-    data: Buffer,
-    contentType: String,
-  },
-  description: {
-    type: String,
-  },
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  added_by: {
-    type: String,
-    required: true,
-  },
-  tier: {
-    type: Number,
-    required: true,
-  },
-});
-
-// User schema
+// Define user schema
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -59,9 +25,7 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  products: [ProductSchema],
 });
 
-const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
+// Export user model
+module.exports = mongoose.model('User', UserSchema);
