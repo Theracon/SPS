@@ -138,7 +138,7 @@ router.get('/:id/products/:productId', async (req, res) => {
       .exec()
       .then((user) => {
         if (user) {
-          Product.findById(productId)
+          Product.find({ _id: productId })
             .exec()
             .then((product) => {
               if (product) {
@@ -177,7 +177,7 @@ router.get('/:id/products/:productId', async (req, res) => {
 router.post('/:id/products/new', upload.single('image'), async (req, res) => {
   try {
     // Fetch product details from form
-    const { name, price, description } = req.body;
+    const { name, price, description, image } = req.body;
     // Find requesting user in the database
     User.findById(req.params.id)
       .exec()
@@ -188,7 +188,7 @@ router.post('/:id/products/new', upload.single('image'), async (req, res) => {
             name,
             price,
             description,
-            image: req.file.path,
+            image,
             added_by: req.params.id,
           });
           // Save product to database

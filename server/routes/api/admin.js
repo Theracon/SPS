@@ -58,7 +58,7 @@ router.patch('/:productId', upload.single('image'), async (req, res) => {
           name: req.body.name,
           price: req.body.price,
           description: req.body.description,
-          image: req.file.path,
+          image: req.body.image,
         },
       }
     )
